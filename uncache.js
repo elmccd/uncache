@@ -13,17 +13,11 @@
  * Module dependencies
  */
 
-var through = require('through2'),
-    gutil = require('gulp-util'),
-    util = require('util'),
+var util = require('util'),
     hogan = require('hogan.js'),
     md5 = require('blueimp-md5').md5,
     fs = require('fs'),
     path = require('path'),
-    PluginError = gutil.PluginError,
-    alreadyBeeped = false,
-    changed = 0,
-    skipped = 0,
     defaultConfig = {
         append: 'time',
         distDir: './',
@@ -54,11 +48,116 @@ function extractBlocks(html) {
     return output;
 }
 
+function mkdirRecursive(dir) {
+    var dirs,
+        i,
+        _path;
+
+    if (fs.existsSync(path.normalize(dir))) {
+        return false;
+    }
+
+    dirs = path.normalize(dir).split(path.sep);
+
+    for (i = 0; i < dirs.length; i += 1) {
+        _path = path.normalize(dirs.slice(0, i + 1).join('/'));
+        if (!fs.existsSync(_path)) {
+            fs.mkdirSync(_path);
+        }
+    }
+}
+
 function processBlock(config, content) {
+    var output = '';
+    var tags = extractTags(content);
+
     globalConfig = util._extend(globalConfig, parseConfig(config));
 
-    console.log(content);
-    return content;
+    tags.forEach(function(link) {
+        output += processTag(link);
+        output += '\r\n';
+    });
+    output = output.slice(0, -2);
+    return output;
+}
+
+function copyFile(fileName, newFileName, config) {
+    var sourceFile = path.join(config.srcDir, fileName);
+    var distFile = path.join(config.distDir, newFileName);
+
+    mkdirRecursive(path.dirname(distFile));
+    fs.createReadStream(sourceFile).pipe(fs.createWriteStream(distFile));
+}
+
+function processTag(tag) {
+    var regexp,
+        fileName,
+        newFileName,
+        newTag;
+    if (tag.indexOf('src=') > 0) {
+        regexp = /<.*\s+src=['"]([^'"]+)['"].*>/;
+    } else if (tag.indexOf('href=') > 0) {
+        regexp = /<.*\s+href=['"]([^'"]+)['"].*>/;
+    } else {
+        return tag;
+    }
+    fileName = tag.split(regexp)[1];
+    newFileName = getNewFileName(fileName, globalConfig);
+
+    if(globalConfig.rename) {
+        copyFile(fileName, newFileName, globalConfig);
+    }
+
+    newTag = tag.replace(fileName, newFileName);
+
+    return newTag;
+}
+
+function getNewFileName(fileName, config) {
+
+    var append,
+        template;
+    if(config.append === 'hash') {
+        append = calculateFileHash(fileName, config);
+    } else if(config.append === 'time') {
+        append = Math.round(+new Date()/1000);
+    } else {
+        append = config.append;
+    }
+
+    var extension= path.extname(fileName);
+    var dirName = path.dirname(fileName);
+    dirName = dirName === '.' ? '' : dirName;
+    var basename = path.basename(fileName, extension);
+    template = hogan.compile(config.template);
+
+    if(config.rename) {
+        return template.render({
+            name: basename,
+            extension: extension.substr(1),
+            path: dirName ? dirName + '/' : dirName,
+            append: append
+        });
+    } else {
+        return fileName + '?' + append;
+    }
+}
+
+function calculateFileHash(fileName, config) {
+    var filePath = path.join(config.srcDir, fileName);
+    var data;
+
+    try {
+        data = fs.readFileSync(filePath);
+    } catch (e) {
+        console.error(e);
+        return false;
+    }
+    return md5(data.toString()).substr(0, 10);
+}
+
+function extractTags(content) {
+    return content.match(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>|<link [^>]*>/gm);
 }
 
 function parseConfig(configString) {
@@ -73,6 +172,9 @@ function parseConfig(configString) {
         parts = element.split(':');
         config[parts[0].trim()] = parts[1].trim();
     });
+
+    //parse string true/false to bool
+    config.rename = config.rename === 'true';
 
     return config;
 }

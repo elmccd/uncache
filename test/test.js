@@ -23,7 +23,10 @@ function getExpected(filePath) {
 }
 
 function compare(name, expectedName, done) {
-    assert.equal(uncache(String(getFixture(name).contents), {}),
+    assert.equal(uncache(String(getFixture(name).contents), {
+            srcDir: path.join('test', 'fixtures'),
+            distDir: path.join('test', 'expected')
+        }),
         String(getExpected(expectedName).contents));
     done();
 
