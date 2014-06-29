@@ -1,6 +1,6 @@
 {
-    "name": "uncache",
-    "description": "",
+    "name": "g-uncache",
+    "description": "Append hash to source files to remove clients cache",
     "version": "0.0.0",
     "main": "uncache.js",
     "dependencies": {
@@ -14,6 +14,6 @@
         "mocha": "*"
     },
     "scripts": {
-        "test": "mocha --no-colors --reporter spec"
+        "test": "mocha"
     }
 }
