@@ -2,7 +2,17 @@
     "name": "g-uncache",
     "description": "Append hash to source files to remove clients cache",
     "version": "0.0.0",
+    "license": "MIT",
+    "repository": "elmccd/uncache",
+    "author": {
+        "name": "Maciej Dudziński",
+        "email": "elmccd@gmail.com",
+        "url": "https://github.com/elmccd"
+    },
     "main": "uncache.js",
+    "files": [
+        "uncache.js"
+    ],
     "dependencies": {
         "blueimp-md5": "^1.1.0",
         "gulp-util": "~2.2.14",

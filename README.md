@@ -1,8 +1,5 @@
 # uncache
-
-[![Build Status](https://secure.travis-ci.org/user/uncache.png?branch=master)](http://travis-ci.org/user/uncache)
-
-
+> Dependency for [gulp-uncache](https://github.com/elmccd/gulp-uncache)
 ## Installation
 
 Install with npm:
@@ -14,7 +11,7 @@ npm install --save uncache
 
 ## API
 
-### uncache()
+### uncache(String html, Object params)
 
 
 ## Testing
