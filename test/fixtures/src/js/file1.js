@@ -1,4 +1,1 @@
-'use strict';
-(function(){
-    alert(1);
-})();
+'use strict';(function(){alert(1);})();
