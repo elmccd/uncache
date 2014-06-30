@@ -1,7 +1,7 @@
 {
     "name": "g-uncache",
     "description": "Append hash to source files to remove clients cache",
-    "version": "0.0.0",
+    "version": "0.0.1",
     "license": "MIT",
     "repository": "elmccd/uncache",
     "author": {
@@ -24,6 +24,7 @@
         "mocha": "*"
     },
     "scripts": {
-        "test": "mocha"
+        "test": "mocha",
+        "coverage": ".\\node_modules\\.bin\\istanbul.cmd cover --hook-run-in-context .\\node_modules\\mocha\\bin\\_mocha -- -R spec"
     }
 }
