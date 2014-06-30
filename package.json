@@ -1,30 +1,32 @@
 {
-    "name": "g-uncache",
-    "description": "Append hash to source files to remove clients cache",
-    "version": "0.0.1",
-    "license": "MIT",
-    "repository": "elmccd/uncache",
-    "author": {
-        "name": "Maciej Dudziński",
-        "email": "elmccd@gmail.com",
-        "url": "https://github.com/elmccd"
-    },
-    "main": "uncache.js",
-    "files": [
-        "uncache.js"
-    ],
-    "dependencies": {
-        "blueimp-md5": "^1.1.0",
-        "gulp-util": "~2.2.14",
-        "hogan.js": "^3.0.0",
-        "through2": "~1.0.0"
-    },
-    "devDependencies": {
-        "chai": "*",
-        "mocha": "*"
-    },
-    "scripts": {
-        "test": "mocha",
-        "coverage": ".\\node_modules\\.bin\\istanbul.cmd cover --hook-run-in-context .\\node_modules\\mocha\\bin\\_mocha -- -R spec"
-    }
+  "name": "g-uncache",
+  "description": "Append hash to source files to remove clients cache",
+  "version": "0.0.1",
+  "license": "MIT",
+  "repository": "elmccd/uncache",
+  "author": {
+    "name": "Maciej Dudziński",
+    "email": "elmccd@gmail.com",
+    "url": "https://github.com/elmccd"
+  },
+  "main": "uncache.js",
+  "files": [
+    "uncache.js"
+  ],
+  "dependencies": {
+    "blueimp-md5": "^1.1.0",
+    "gulp-util": "~2.2.14",
+    "hogan.js": "^3.0.0",
+    "through2": "~1.0.0"
+  },
+  "devDependencies": {
+    "chai": "*",
+    "coveralls": "^2.10.1",
+    "mocha": "*",
+    "mocha-lcov-reporter": "0.0.1"
+  },
+  "scripts": {
+    "test": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
+    "coverage": ".\\node_modules\\.bin\\istanbul.cmd cover --hook-run-in-context .\\node_modules\\mocha\\bin\\_mocha -- -R spec"
+  }
 }
