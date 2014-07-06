@@ -10,7 +10,7 @@
 'use strict';
 
 /**
- * Module dependencies.
+ * Module dependencies
  */
 
 var util = require('util'),
@@ -27,6 +27,8 @@ var util = require('util'),
         template: '{{path}}{{name}}_{{append}}.{{extension}}'
     },
     globalConfig = {};
+
+require('colors');
 
 var uncache = {
     extractBlocks: function (html) {
@@ -94,6 +96,10 @@ var uncache = {
             return tag;
         }
         fileName = tag.split(regexp)[1];
+        if((globalConfig.rename === true || globalConfig.append === 'hash') && !fs.existsSync(path.join(globalConfig.srcDir, fileName))){
+            console.error("[uncache] " + "Couldn't find file: ".red + fileName + ". Tag Skipped");
+            return tag;
+        }
         newFileName = uncache.getNewFileName(fileName, globalConfig);
 
         if (globalConfig.rename) {
@@ -141,7 +147,7 @@ var uncache = {
         try {
             data = fs.readFileSync(filePath);
         } catch (e) {
-            console.error(e);
+            console.error("[uncache] " + "Couldn't find file: ".red + fileName);
             return false;
         }
         return md5(data.toString()).substr(0, 10);

@@ -71,7 +71,7 @@ describe('parsing invalid input', function () {
         done();
     });
 
-    it("should return empy object when there is no inline config", function (done) {
+    it("should return empty object when there is no inline config", function (done) {
         assert.equal(JSON.stringify({}), JSON.stringify(uncache.parseConfig(undefined)));
         done();
     });
