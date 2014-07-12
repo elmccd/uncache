@@ -11,7 +11,7 @@
 Install with npm:
 
 ```
-npm install --save uncache
+npm install --save g-uncache
 ```
 
 
