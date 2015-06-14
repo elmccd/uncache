@@ -77,7 +77,7 @@ var uncache = {
         return output;
     },
     copyFile: function (fileName, newFileName, config) {
-        var sourceFile = path.join(config.srcDir, fileName);
+        var sourceFile = uncache.getSrcFile(config, fileName);
         var distFile = path.join(config.distDir, newFileName);
 
         uncache.mkdirRecursive(path.dirname(distFile));
@@ -96,7 +96,7 @@ var uncache = {
             return tag;
         }
         fileName = tag.split(regexp)[1];
-        if((globalConfig.rename === true || globalConfig.append === 'hash') && !fs.existsSync(path.join(globalConfig.srcDir, fileName))){
+        if((globalConfig.rename === true || globalConfig.append === 'hash') && !fs.existsSync(uncache.getSrcFile(globalConfig, fileName))){
             console.error("[uncache] " + "Couldn't find file: ".red + fileName + ". Tag Skipped");
             return tag;
         }
@@ -141,7 +141,7 @@ var uncache = {
         }
     },
     calculateFileHash: function (fileName, config) {
-        var filePath = path.join(config.srcDir, fileName);
+        var filePath = uncache.getSrcFile(config, fileName)
         var data;
 
         try {
@@ -152,6 +152,15 @@ var uncache = {
         }
         return md5(data.toString()).substr(0, 10);
     },
+
+    getSrcFile : function(config, fileName) {
+      if (typeof(config.SrcFile) === "function") {
+        return config.SrcFile(fileName);
+      } else {
+        return path.join(config.SrcDir, fileName);
+      }
+    },
+
     extractTags: function (content) {
         return content.match(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>|<link [^>]*>/gm);
     },
