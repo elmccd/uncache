@@ -157,7 +157,7 @@ var uncache = {
       if (typeof(config.SrcFile) === "function") {
         return config.SrcFile(fileName);
       } else {
-        return path.join(config.SrcDir, fileName);
+        return path.join(config.srcDir, fileName);
       }
     },
 
