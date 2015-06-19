@@ -5,6 +5,7 @@
 [![Dependency Status](https://david-dm.org/elmccd/uncache.svg)](https://david-dm.org/elmccd/uncache)
 [![Coverage Status](https://img.shields.io/coveralls/elmccd/uncache.svg)](https://coveralls.io/r/elmccd/uncache?branch=master)
 > Dependency for [gulp-uncache](https://github.com/elmccd/gulp-uncache)
+> Visit mentioned repo for available parameters and more
 
 ## Installation
 

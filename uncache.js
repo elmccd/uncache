@@ -141,7 +141,7 @@ var uncache = {
         }
     },
     calculateFileHash: function (fileName, config) {
-        var filePath = uncache.getSrcFile(config, fileName)
+        var filePath = uncache.getSrcFile(config, fileName);
         var data;
 
         try {
@@ -153,12 +153,12 @@ var uncache = {
         return md5(data.toString()).substr(0, 10);
     },
 
-    getSrcFile : function(config, fileName) {
-      if (typeof(config.SrcFile) === "function") {
-        return config.SrcFile(fileName);
-      } else {
-        return path.join(config.srcDir, fileName);
-      }
+    getSrcFile: function (config, fileName) {
+        if (typeof config.srcFileMap === "function") {
+            return config.srcFileMap(fileName);
+        } else {
+            return path.join(config.srcDir, fileName);
+        }
     },
 
     extractTags: function (content) {
