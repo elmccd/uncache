@@ -33,9 +33,9 @@ function compare(name, expectedName, done) {
 
 describe('extractTags', function () {
     it('should parse script and link tags', function (done) {
-        var raw = '<script></script><script></script><link />'
+        var raw = '<script src></script><script src></script><link href/><img src="something.jpg">';
         var tags = uncache.extractTags(raw);
-        assert.equal(tags.length, 3);
+        assert.equal(tags.length, 4);
         done();
     });
 });
