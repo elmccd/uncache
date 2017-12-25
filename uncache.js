@@ -162,7 +162,7 @@ var uncache = {
     },
 
     extractTags: function (content) {
-        return content.match(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>|<link [^>]*>/gm);
+        return content.match(/<[^>]+(src|href).*?>(<\/[^>]+>)?/gm);
     },
     parseConfig: function (configString) {
         var config = {},
